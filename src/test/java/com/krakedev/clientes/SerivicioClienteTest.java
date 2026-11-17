@@ -29,7 +29,7 @@ class SerivicioClienteTest {
 	// Verifica que retorne el objeto Cliente creado y que la lista aumente a 1 elemento.
 	@Test
 	void testCrearClienteExitoso() {
-		Cliente cliente = new Cliente("1712345678", "Juan", "Perez");
+		Cliente cliente = new Cliente("1712345678", "Juan", "Perez", "iefc.juan@gmail.com");
 		Cliente resultado = servicio.crear(cliente);
 
 		assertNotNull(resultado, "Error: El método crear() retornó null para un cliente nuevo.");
@@ -41,8 +41,8 @@ class SerivicioClienteTest {
 	// Verifica que retorne null y que no se duplique el registro en el ArrayList.
 	@Test
 	void testCrearClienteDuplicado() {
-		Cliente cliente1 = new Cliente("1712345678", "Juan", "Perez");
-		Cliente cliente2 = new Cliente("1712345678", "Maria", "Gomez");
+		Cliente cliente1 = new Cliente("1712345678", "Juan", "Perez", "iefc.juan@gmail.com");
+		Cliente cliente2 = new Cliente("1712345678", "Maria", "Gomez", "maria@gmail.com");
 
 		servicio.crear(cliente1);
 		Cliente resultado = servicio.crear(cliente2);
@@ -55,7 +55,7 @@ class SerivicioClienteTest {
 	// cuando la cédula buscada está registrada en la lista.
 	@Test
 	void testBuscarPorCedulaExistente() {
-		Cliente cliente = new Cliente("1798765432", "Ana", "Lopez");
+		Cliente cliente = new Cliente("1798765432", "Ana", "Lopez", "ana@gmail.com");
 		servicio.crear(cliente);
 
 		Cliente encontrado = servicio.buscarPorCedula("1798765432");
@@ -63,6 +63,7 @@ class SerivicioClienteTest {
 		assertNotNull(encontrado, "Error: No se encontró un cliente que sí existe en la lista.");
 		assertEquals("Ana", encontrado.getNombre(), "Error: El nombre del cliente encontrado no coincide.");
 		assertEquals("Lopez", encontrado.getApellido(), "Error: El apellido del cliente encontrado no coincide.");
+		assertEquals("ana@gmail.com", encontrado.getEmail(), "Error: El email no se actualizó.");
 	}
 
 	// Prueba que el método buscarPorCedula() retorne null cuando se busca una cédula
@@ -80,8 +81,8 @@ class SerivicioClienteTest {
 	void testListar() {
 		assertEquals(0, servicio.listar().size(), "Error: La lista debería iniciar vacía.");
 
-		servicio.crear(new Cliente("1111111111", "Carlos", "Ruiz"));
-		servicio.crear(new Cliente("2222222222", "Laura", "Mora"));
+		servicio.crear(new Cliente("1111111111", "Carlos", "Ruiz", "carlos@gmail.com"));
+		servicio.crear(new Cliente("2222222222", "Laura", "Mora", "laura@gmail.com"));
 
 		List<Cliente> lista = servicio.listar();
 
@@ -92,21 +93,22 @@ class SerivicioClienteTest {
 	// y retorne el objeto Cliente con los datos ya actualizados.
 	@Test
 	void testActualizarClienteExistente() {
-		servicio.crear(new Cliente("1234567890", "Pedro", "Diaz"));
+		servicio.crear(new Cliente("1234567890", "Pedro", "Diaz", "pedro@gmail.com"));
 
-		Cliente datosNuevos = new Cliente("1234567890", "Pedro Pablo", "Diaz Vega");
+		Cliente datosNuevos = new Cliente("1234567890", "Pedro Pablo", "Diaz Vega", "iefc.juan@gmail.com");
 		Cliente actualizado = servicio.actualizar("1234567890", datosNuevos);
 
 		assertNotNull(actualizado, "Error: El método actualizar() retornó null para un cliente existente.");
 		assertEquals("Pedro Pablo", actualizado.getNombre(), "Error: El nombre no se actualizó.");
 		assertEquals("Diaz Vega", actualizado.getApellido(), "Error: El apellido no se actualizó.");
+		assertEquals("iefc.juan@gmail.com", actualizado.getEmail(), "Error: El email no se actualizó.");
 	}
 
 	// Prueba que el método actualizar() retorne null si se intenta actualizar
 	// una cédula que no existe en la lista.
 	@Test
 	void testActualizarClienteNoExistente() {
-		Cliente datosNuevos = new Cliente("9999999999", "Nombre", "Apellido");
+		Cliente datosNuevos = new Cliente("9999999999", "Nombre", "Apellido", "iefc.juan@gmail.com");
 		Cliente resultado = servicio.actualizar("9999999999", datosNuevos);
 
 		assertNull(resultado, "Error: El método actualizar() debería retornar null si la cédula no existe.");
@@ -116,7 +118,7 @@ class SerivicioClienteTest {
 	// cuando la cédula existe.
 	@Test
 	void testEliminarClienteExistente() {
-		servicio.crear(new Cliente("5555555555", "Sofia", "Castro"));
+		servicio.crear(new Cliente("5555555555", "Sofia", "Castro", "sofia@gmail.com"));
 
 		boolean eliminado = servicio.eliminar("5555555555");
 
